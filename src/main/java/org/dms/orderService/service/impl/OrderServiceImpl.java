@@ -15,36 +15,57 @@ import org.springframework.web.client.RestTemplate;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * The Class OrderServiceImpl.
+ */
 @Service
 @Slf4j
 public class OrderServiceImpl implements OrderService {
 
-	RestTemplate restTemplate;
+	private static final String GET_TOTAL_PRICE_URL = "/phonecatalog/phone/getTotalPrice";
+	private static final String VALIDATE_ORDER_URL = "/phonecatalog/phone/validateOrder";
 
+	/** The rest template. */
+	private RestTemplate restTemplate;
+
+	/**
+	 * Instantiates a new order service impl.
+	 *
+	 * @param restTemplate
+	 *            the rest template
+	 */
 	@Autowired
 	public OrderServiceImpl(RestTemplate restTemplate) {
 		this.restTemplate = restTemplate;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.dms.orderService.service.OrderService#validateOrder(org.dms.orderService.
+	 * entity.Order)
+	 */
 	@Override
 	public boolean validateOrder(Order order) {
-		return this.restTemplate.postForEntity("http://localhost:8080/phonecatalog/phone/validateOrder",
-				order.getPhones(), Boolean.class).getBody();
+		return this.restTemplate.postForEntity(VALIDATE_ORDER_URL, order.getPhones(), Boolean.class).getBody();
 
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.dms.orderService.service.OrderService#calculateOrder(org.dms.orderService
+	 * .entity.Order)
+	 */
 	@Override
 	public Order calculateOrder(Order order) {
-		BigDecimal result = this.restTemplate.postForEntity("http://localhost:8080/phonecatalog/phone/getTotalPrice",
-				order.getPhones(), BigDecimal.class).getBody();
+		BigDecimal result = this.restTemplate.postForEntity(GET_TOTAL_PRICE_URL, order.getPhones(), BigDecimal.class)
+				.getBody();
 		order.setTotalPrice(result);
 		log.info(order.toString());
 		return order;
-	}
-
-	@Override
-	public int test() {
-		return this.restTemplate.getForObject("http://localhost:8080/phonecatalog/phone/test", Integer.class);
 	}
 
 }

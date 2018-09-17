@@ -1,6 +1,6 @@
 /*
  * @author: ${author}
- * @date: 15-sep-2018
+ * @date: 16-sep-2018
  * 
  */
 package org.dms.orderService.entity;
@@ -8,6 +8,11 @@ package org.dms.orderService.entity;
 import java.math.BigDecimal;
 import java.util.List;
 
+/**
+ * The Class Order. This class was meant to be an Entity. In that case, there
+ * should be two tables in the database: one for the Orders and another with the
+ * relationship (many-to-many) between Orders and Phone's ids.
+ */
 public class Order {
 
 	private Long id;
